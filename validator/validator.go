@@ -13,6 +13,7 @@ const (
 	errorLsGtInt      = "Число больше 10 или меньше 1.\nПриложение завершит свою работу."
 	unknownType       = "Неизвестный тип результата для второго члена выражения\n"
 	templateErrString = "Невозможна калькуляция типов в выражении: %T %v %T\n"
+	errorTwoMemb      = "Ошибка при вводе второго члена выражения, не является допуститмым числом или строкой в кавычках.\nПриложение завершит свою работу."
 )
 
 type MemberTwo interface{}
@@ -66,29 +67,27 @@ func validateSign(varSign string) (string, error) {
 	return sign, nil
 }
 
-func validateNum(num string) error {
-	num1, err := strconv.Atoi(num)
+func validateNum(num string) (int, error) {
+	result, err := strconv.Atoi(num)
 	if err != nil {
-		return fmt.Errorf(errorInt)
+		return 0, fmt.Errorf(errorInt)
 	}
-	if num1 < 1 || num1 > 10 {
-		return fmt.Errorf(errorLsGtInt)
+	if result < 1 || result > 10 {
+		return 0, fmt.Errorf(errorLsGtInt)
 	}
-	return nil
+	return result, nil
 }
 
-func validateStrOrNum(input string) (interface{}, error) {
+func validateStrOrNum(memb2 string) (interface{}, error) {
 	var result interface{}
-	fmt.Println(input)
-	err := validateNum(input)
+	fmt.Println(memb2)
+	result, err := validateNum(memb2)
 	if err == nil {
-		result, _ = strconv.Atoi(input)
+		return result, nil
 	} else {
-		strResult, err := validateStr(input)
+		strResult, err := validateStr(memb2)
 		if err == nil {
 			result = strResult
-		} else {
-			return nil, err
 		}
 	}
 
