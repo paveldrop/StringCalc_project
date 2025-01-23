@@ -51,10 +51,10 @@ const (
 
 func GetArgs() (string, string, string) {
 	arguments := os.Args[1:]
+	fmt.Println(arguments)
 	if len(arguments) != 3 {
 		panic(countArgs)
 	}
 
-	fmt.Println(arguments)
 	return arguments[0], arguments[1], arguments[2]
 }
