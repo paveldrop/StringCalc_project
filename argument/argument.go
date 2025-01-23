@@ -3,7 +3,6 @@ package argument
 import (
 	"fmt"
 	"os"
-	valid "str_calc/validator"
 )
 
 /*
@@ -46,18 +45,16 @@ import (
 При вводе пользователем выражения, не соответствующего одной из вышеописанных
 арифметических операций, приложение выдаёт панику и завершает свою работу.
 */
+const (
+	countArgs = "Аргументов больше или меньше чем 3.\nПриложение завершит свою работу."
+)
 
-func GetArgs() {
+func GetArgs() (string, string, string) {
 	arguments := os.Args[1:]
 	if len(arguments) != 3 {
-		panic(valid.CountArgs)
+		panic(countArgs)
 	}
 
 	fmt.Println(arguments)
-
-	_, _, _, err := valid.Validator(arguments[0], arguments[1], arguments[2])
-	if err != nil {
-		panic(err)
-	}
-
+	return arguments[0], arguments[1], arguments[2]
 }
