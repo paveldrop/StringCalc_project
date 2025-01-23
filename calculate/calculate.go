@@ -1,6 +1,9 @@
 package calculate
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func OperationCalc(memb1, sign string, memb2 interface{}) string {
 	switch sign {
@@ -9,7 +12,7 @@ func OperationCalc(memb1, sign string, memb2 interface{}) string {
 		return operationAdd(memb1, memb2)
 	case "-":
 		fmt.Println("operation remove")
-
+		return operationRemove(memb1, memb2)
 	case "/":
 		fmt.Println("operation division")
 		return operationDiv(memb1, memb2)
@@ -19,7 +22,6 @@ func OperationCalc(memb1, sign string, memb2 interface{}) string {
 	default:
 		return ""
 	}
-	return ""
 }
 
 func operationAdd(memb1 string, memb2 interface{}) string {
@@ -27,17 +29,20 @@ func operationAdd(memb1 string, memb2 interface{}) string {
 	return memb1
 }
 
-// func operationRemove(memb1 string, memb2 interface{}) string {
-
-// }
+func operationRemove(memb1 string, memb2 interface{}) string {
+	subStr := memb2.(string)
+	result := strings.Replace(memb1, subStr, "", 1)
+	return result
+}
 
 func operationMultipl(memb1 string, memb2 interface{}) string {
 	num := memb2.(int)
 	temp := memb1
+	result := ""
 	for i := 0; i < num; i++ {
-		memb1 += temp
+		result += temp
 	}
-	return memb1
+	return result
 }
 
 func operationDiv(memb1 string, memb2 interface{}) string {
