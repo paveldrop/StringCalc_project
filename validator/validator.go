@@ -6,12 +6,13 @@ import (
 )
 
 const (
-	errorStr     = "Первый член выражения не является строкой или не обозначено кавычками.\nПриложение завершит свою работу."
-	CountArgs    = "Аргументов больше или меньше чем 3.\nПриложение завершит свою работу."
-	lenStr       = "Строка более 10 символов.\nПриложение завершит свою работу."
-	errorSign    = "Знак не определен.\nПриложение завершит свою работу."
-	errorInt     = "Член выражения не является целочисленным или строкой.\nПриложение завершит свою работу."
-	errorLsGtInt = "Число больше 10 или меньше 1.\nПриложение завершит свою работу."
+	errorStr          = "Первый член выражения не является строкой или не обозначено кавычками.\nПриложение завершит свою работу."
+	lenStr            = "Строка более 10 символов.\nПриложение завершит свою работу."
+	errorSign         = "Знак не определен.\nПриложение завершит свою работу."
+	errorInt          = "Член выражения не является целочисленным или строкой.\nПриложение завершит свою работу."
+	errorLsGtInt      = "Число больше 10 или меньше 1.\nПриложение завершит свою работу."
+	unknownType       = "Неизвестный тип результата для второго члена выражения\n"
+	templateErrString = "Невозможна калькуляция типов в выражении: %T %v %T\n"
 )
 
 type MemberTwo interface{}
@@ -21,27 +22,29 @@ func Validator(var1, var2, var3 string) (string, string, interface{}, error) {
 	if err != nil {
 		return "", "", "", err
 	}
-	fmt.Println(memberOne)
+	// fmt.Println(memberOne)
 	sign, err := validateSign(var2)
 	if err != nil {
 		return "", "", "", err
 	}
-	fmt.Println(sign)
+	// fmt.Println(sign)
 	MemberTwo, err := validateStrOrNum(var3)
 	if err != nil {
 		return "", "", "", err
 	}
-	fmt.Println(MemberTwo)
-	fmt.Printf("num1=%s %T sign=%v %T num2=%v %T\n", memberOne, memberOne, sign, sign, memberTwo, memberTwo)
+	// fmt.Printf("num1=%s %T sign=%v %T num2=%v %T\n", memberOne, memberOne, sign, sign, MemberTwo, MemberTwo)
+	err = validateCalculation(memberOne, sign, MemberTwo)
+	if err != nil {
+		return "", "", "", err
+	}
 	return memberOne, sign, MemberTwo, nil
 }
 
 func validateStr(var1 string) (string, error) {
 	n := len(var1)
-	if var1[0] != '"' && var1[n-1] != '"' {
-		fmt.Println(var1, "tut")
+	if var1[0] != '"' || var1[n-1] != '"' {
 		return "", fmt.Errorf(errorStr)
-	} else if n > 11 {
+	} else if n > 10 {
 		return "", fmt.Errorf(lenStr)
 	} else {
 		return var1[1 : n-1], nil
@@ -71,7 +74,7 @@ func validateNum(num string) error {
 	if err != nil {
 		return fmt.Errorf(errorInt)
 	}
-	if num1 < 1 || 10 < num1 {
+	if num1 < 1 || num1 > 10 {
 		return fmt.Errorf(errorLsGtInt)
 	}
 	return nil
@@ -92,4 +95,21 @@ func validateStrOrNum(input string) (interface{}, error) {
 	}
 
 	return result, nil
+}
+
+func validateCalculation(memberOne, sign string, memberTwo interface{}) error {
+	strError := fmt.Sprintf(templateErrString, memberOne, sign, memberTwo)
+	switch memberTwo.(type) {
+	case string:
+		if sign == "/" || sign == "*" {
+			return fmt.Errorf(strError)
+		}
+	case int:
+		if sign == "+" || sign == "-" {
+			return fmt.Errorf(strError)
+		}
+	default:
+		return fmt.Errorf(unknownType)
+	}
+	return nil
 }
