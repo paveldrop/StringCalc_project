@@ -15,6 +15,9 @@ func main() {
 	}
 	fmt.Println(memb1, sign, memb2)
 	result := calc.OperationCalc(memb1, sign, memb2)
+	if len(result) > 40 {
+		result = result[:40] + "..."
+	}
 	fmt.Println(result)
 	fmt.Println("Приложение завершено корректно")
 }

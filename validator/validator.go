@@ -39,7 +39,6 @@ func Validator(var1, var2, var3 string) (string, string, interface{}, error) {
 
 func validateStr(var1 string) (string, error) {
 	n := len(var1)
-	// fmt.Println(n)
 	if var1[0] != '"' || var1[n-1] != '"' {
 		return "", fmt.Errorf(errorStr)
 	} else if n-2 > 10 {
@@ -80,6 +79,7 @@ func validateNum(num string) error {
 
 func validateStrOrNum(input string) (interface{}, error) {
 	var result interface{}
+	fmt.Println(input)
 	err := validateNum(input)
 	if err == nil {
 		result, _ = strconv.Atoi(input)
