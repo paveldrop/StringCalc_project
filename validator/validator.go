@@ -22,17 +22,14 @@ func Validator(var1, var2, var3 string) (string, string, interface{}, error) {
 	if err != nil {
 		return "", "", "", err
 	}
-	// fmt.Println(memberOne)
 	sign, err := validateSign(var2)
 	if err != nil {
 		return "", "", "", err
 	}
-	// fmt.Println(sign)
 	MemberTwo, err := validateStrOrNum(var3)
 	if err != nil {
 		return "", "", "", err
 	}
-	// fmt.Printf("num1=%s %T sign=%v %T num2=%v %T\n", memberOne, memberOne, sign, sign, MemberTwo, MemberTwo)
 	err = validateCalculation(memberOne, sign, MemberTwo)
 	if err != nil {
 		return "", "", "", err
@@ -42,9 +39,10 @@ func Validator(var1, var2, var3 string) (string, string, interface{}, error) {
 
 func validateStr(var1 string) (string, error) {
 	n := len(var1)
+	// fmt.Println(n)
 	if var1[0] != '"' || var1[n-1] != '"' {
 		return "", fmt.Errorf(errorStr)
-	} else if n > 10 {
+	} else if n-2 > 10 {
 		return "", fmt.Errorf(lenStr)
 	} else {
 		return var1[1 : n-1], nil
