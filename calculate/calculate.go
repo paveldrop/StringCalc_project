@@ -1,23 +1,18 @@
 package calculate
 
 import (
-	"fmt"
 	"strings"
 )
 
 func OperationCalc(memb1, sign string, memb2 interface{}) string {
 	switch sign {
 	case "+":
-		fmt.Println("operation add")
 		return operationAdd(memb1, memb2)
 	case "-":
-		fmt.Println("operation remove")
 		return operationRemove(memb1, memb2)
 	case "/":
-		fmt.Println("operation division")
 		return operationDiv(memb1, memb2)
 	case "*":
-		fmt.Println("operation multiplication")
 		return operationMultipl(memb1, memb2)
 	default:
 		return ""

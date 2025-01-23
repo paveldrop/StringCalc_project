@@ -81,29 +81,29 @@ func validateNum(num string) (int, error) {
 func validateStrOrNum(memb2 string) (interface{}, error) {
 	var result interface{}
 	fmt.Println(memb2)
-	result, err := validateNum(memb2)
-	if err == nil {
-		return result, nil
-	} else {
-		strResult, err := validateStr(memb2)
+	if memb2[0] == '"' && memb2[len(memb2)-1] == '"' {
+		result, err := validateStr(memb2)
 		if err == nil {
-			result = strResult
+			return result, nil
+		}
+	} else {
+		result, err := validateNum(memb2)
+		if err == nil {
+			return result, nil
 		}
 	}
-
-	return result, nil
+	return result, fmt.Errorf(errorTwoMemb)
 }
 
 func validateCalculation(memberOne, sign string, memberTwo interface{}) error {
-	strError := fmt.Sprintf(templateErrString, memberOne, sign, memberTwo)
 	switch memberTwo.(type) {
 	case string:
 		if sign == "/" || sign == "*" {
-			return fmt.Errorf(strError)
+			return fmt.Errorf(templateErrString, memberOne, sign, memberTwo)
 		}
 	case int:
 		if sign == "+" || sign == "-" {
-			return fmt.Errorf(strError)
+			return fmt.Errorf(templateErrString, memberOne, sign, memberTwo)
 		}
 	default:
 		return fmt.Errorf(unknownType)

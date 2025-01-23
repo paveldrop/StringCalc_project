@@ -1,7 +1,6 @@
 package argument
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -52,7 +51,6 @@ const (
 
 func GetArgs() (string, string, string) {
 	arguments := os.Args[1:]
-	fmt.Println(arguments)
 	if len(arguments) != 3 {
 		panic(countArgs)
 	}
