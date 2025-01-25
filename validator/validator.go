@@ -79,20 +79,16 @@ func validateNum(num string) (int, error) {
 }
 
 func validateStrOrNum(memb2 string) (interface{}, error) {
-	var result interface{}
-	fmt.Println(memb2)
-	if memb2[0] == '"' && memb2[len(memb2)-1] == '"' {
-		result, err := validateStr(memb2)
-		if err == nil {
-			return result, nil
-		}
+	resultStr, errStr := validateStr(memb2)
+	resultNum, errNum := validateNum(memb2)
+
+	if errStr != nil && errNum != nil {
+		return "", fmt.Errorf(errorTwoMemb)
+	} else if errStr != nil {
+		return resultNum, nil
 	} else {
-		result, err := validateNum(memb2)
-		if err == nil {
-			return result, nil
-		}
+		return resultStr, nil
 	}
-	return result, fmt.Errorf(errorTwoMemb)
 }
 
 func validateCalculation(memberOne, sign string, memberTwo interface{}) error {
